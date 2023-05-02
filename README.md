@@ -78,31 +78,81 @@ You must first set up a node and lock up a specified quantity of CELO tokens as 
 To create a validator group on the Celo network, you'll need to write a smart contract that implements the PoSI validator logic. Here's an example of a PoSI validator smart contract written in Solidity:
 
 ```solidity
-// SPDX-License-Identifier: MIT
-
+/**
+ * @title PoSIValidator
+ * @dev Contract for managing a list of Proof of Stake Incentivized Validators
+ */
 pragma solidity ^0.8.0;
 
 contract PoSIValidator {
 
-    address[] public validators;
+    /**
+     * @dev An array to hold the list of validators
+     */
+    address[] private validators;
 
-    function addValidator(address validator) public {
-        validators.push(validator);
+    /**
+     * @dev A mapping to keep track of whether a validator exists in the array
+     */
+    mapping(address => bool) private validatorExists;
+
+    /**
+     * @dev Address of the contract owner
+     */
+    address private owner;
+
+    /**
+     * @dev Modifier to allow only the contract owner to perform certain operations
+     */
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only contract owner can perform this operation.");
+        _;
     }
 
-    function removeValidator(address validator) public {
+    /**
+     * @dev Constructor that sets the contract owner to the deployer
+     */
+    constructor() {
+        owner = msg.sender;
+    }
+
+    /**
+     * @dev Adds a validator to the list of validators
+     * @param validator The address of the validator to add
+     */
+    function addValidator(address validator) public onlyOwner {
+        require(!validatorExists[validator], "Validator already exists.");
+        validators.push(validator);
+        validatorExists[validator] = true;
+    }
+
+    /**
+     * @dev Removes a validator from the list of validators
+     * @param validator The address of the validator to remove
+     */
+    function removeValidator(address validator) public onlyOwner {
+        require(validatorExists[validator], "Validator does not exist.");
+        uint indexToRemove = 0;
         for (uint i = 0; i < validators.length; i++) {
             if (validators[i] == validator) {
-                delete validators[i];
+                indexToRemove = i;
                 break;
             }
         }
+        validators[indexToRemove] = validators[validators.length - 1];
+        validators.pop();
+        validatorExists[validator] = false;
     }
 
+    /**
+     * @dev Gets the list of validators
+     * @return The list of validators
+     */
     function getValidators() public view returns (address[] memory) {
         return validators;
     }
 }
+
 ```
 
 This smart contract defines a PoSI validator group that allows validators to be added and removed from the group. The `addValidator` function adds a validator to the group, while the `removeValidator` function removes a validator from the group. The `getValidators` function returns a list of all the validators in the group.
