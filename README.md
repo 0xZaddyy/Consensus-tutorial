@@ -185,7 +185,7 @@ export const removeValidator = async (validator) => {
   return tx;
 };
 ```
-This code exports three functions that allow us to interact with the PoSI validator smart contract. The `getValidators` function retrieves the list of validators in the group, while the `addValidator` and `removeValidator` functions add and remove validators from the group, respectively.
+This code exports three functions that allow us to interact with the PoSI validator smart contract. The `getValidators()` function retrieves the list of validators in the group, while the `addValidator()` and `removeValidator()` functions add and remove validators from the group, respectively.
 
 ### Step 4: Import the PoSI Validator Contract in the App
 
@@ -196,7 +196,7 @@ import PoSIValidator from './PoSIValidator';
 ```
 
 ### Step 5: Display the List of Validators
-In the `PoSIValidator` component, we can use the `getValidators` function to retrieve the list of validators and display it to the user. Update the `PoSIValidator` component as follows:
+In the `PoSIValidator` component, we can use the `getValidators()` function to retrieve the list of validators and display it to the user. Update the `PoSIValidator` component as follows:
 
 ```javascript
 import { useState, useEffect } from 'react';
@@ -228,7 +228,7 @@ function PoSIValidator() {
 export default PoSIValidator;
 ```
 
-This code uses the `useState` and `useEffect` hooks to fetch the list of validators when the component mounts and stores it in state using the setValidators function. The useEffect hook is used to make sure that the fetchValidators function is only called once when the component mounts, rather than on every re-render.
+This code uses the `useState` and `useEffect` hooks to fetch the list of validators when the component mounts and stores it in state using the `setValidators()` function. The useEffect hook is used to make sure that the fetchValidators function is only called once when the component mounts, rather than on every re-render.
 
 ### Step 6: Add a Form to Add a Validator
 
@@ -469,8 +469,8 @@ button[type="submit"]:hover {
 
 This CSS code gives the PoSIValidator component some fundamental styling to improve its appearance and user-friendliness.
 
-That's all, then! Using Solidity and React, we created a straightforward dummy app for a PoSI contract on the Celo blockchain. Of course, this is just a starting point, and there are lots of ways we can enhance and expand on this program. Nevertheless, perhaps this lesson has provided you with a solid foundation for creating your own.
+That's all, then! Using Solidity and React, we created a straightforward dummy app for a PoSI contract on the Celo blockchain. Of course, this is just a starting point, and there are lots of ways we can enhance and expand this program. Nevertheless, perhaps this lesson has provided you with a solid foundation for creating your own.
 
 ## Conclusion
 
-The PoS consensus algorithm and its operation in relation to the **Celo** blockchain have been discussed in this lesson. We've learnt how epoch rotation is utilized to keep the network safe and decentralized, how validators are chosen based on their stake and identity, and how validators are selected. Additionally, we went over how to set up a Solidity smart contract to create a PoSI validator group and join the **Celo** network as a validator, we also built a very simple mock dapp to interact with the contract on a user friendly ground. Developers may create scalable and more effective blockchain apps on the **Celo** network by knowing the PoS consensus method.
+The PoS consensus algorithm and its operation in relation to the **Celo** blockchain have been discussed in this lesson. We've learned how epoch rotation is utilized to keep the network safe and decentralized, how validators are chosen based on their stake and identity, and how validators are selected. Additionally, we went over how to set up a Solidity smart contract to create a PoSI validator group and join the **Celo** network as a validator, we also built a very simple mock dapp to interact with the contract on a user-friendly ground. Developers may create scalable and more effective blockchain apps on the **Celo** network by knowing the PoS consensus method.
