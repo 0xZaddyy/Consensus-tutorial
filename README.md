@@ -179,22 +179,23 @@ import { useState, useEffect } from 'react';
 import { getValidators } from './PoSIValidator';
 
 function PoSIValidator() {
-  const [validators, setValidators] = useState([]);
+  const { validators, setValidators } = useState([]);
+
 
   useEffect(() => {
-    async function fetchValidators() {
-      const validators = await getValidators();
-      setValidators(validators);
-    }
-    fetchValidators();
-  }, []);
+  const fetchValidators = async () => {
+    const validators = await getValidators();
+    setValidators(validators);
+  };
+  fetchValidators();
+}, []);
 
   return (
     <div>
       <h2>Validators</h2>
       <ul>
         {validators.map((validator) => (
-          <li key={validator}>{validator}</li>
+          <li key={validator || 'default'}>{validator || 'Loading...'}</li>
         ))}
       </ul>
     </div>
@@ -226,19 +227,20 @@ function PoSIValidator() {
     fetchValidators();
   }, []);
 
-  const handleAddValidator = async (event) => {
-    event.preventDefault();
-    await addValidator(validatorInput);
-    setValidatorInput('');
-    const validators = await getValidators();
-    setValidators(validators);
-  };
+  const handleAddValidator = useCallback(async (event) => {
+  event.preventDefault();
+  await addValidator(validatorInput);
+  setValidatorInput('');
+  const validators = await getValidators();
+  setValidators(validators);
+}, [validatorInput]);
+
 
   return (
     <div>
       <h2>Validators</h2>
       <ul>
-        {validators.map((validator) => (
+        {validators?.map((validator) => (
           <li key={validator}>{validator}</li>
         ))}
       </ul>
@@ -271,27 +273,35 @@ function PoSIValidator() {
   const [validatorInput, setValidatorInput] = useState('');
 
   useEffect(() => {
-    async function fetchValidators() {
-      const validators = await getValidators();
-      setValidators(validators);
-    }
+    // Fetch the initial validators list on component mount
     fetchValidators();
   }, []);
 
-  const handleAddValidator = async (event) => {
+  // Combined the add and remove validator forms into a single form
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    await addValidator(validatorInput);
-    setValidatorInput('');
-    const validators = await getValidators();
-    setValidators(validators);
+
+    try {
+      // Update the validators list with the new or removed validator
+      await updateValidators();
+
+      // Clear the input field
+      setValidatorInput('');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleRemoveValidator = async (event) => {
-    event.preventDefault();
-    await removeValidator(validatorInput);
-    setValidatorInput('');
-    const validators = await getValidators();
-    setValidators(validators);
+  // Refactored the add and remove validator functions into a single function
+  const updateValidators = async () => {
+    // Update the validators list with the new or removed validator
+    const updatedValidators = await Promise.all([
+      addValidator(validatorInput),
+      removeValidator(validatorInput)
+    ]).then(() => getValidators());
+
+    // Update the state with the latest validators list
+    setValidators(updatedValidators);
   };
 
   return (
@@ -302,16 +312,9 @@ function PoSIValidator() {
           <li key={validator}>{validator}</li>
         ))}
       </ul>
-      <form onSubmit={handleAddValidator}>
+      <form onSubmit={handleSubmit}>
         <label>
-          Add validator:
-          <input type="text" value={validatorInput} onChange={(e) => setValidatorInput(e.target.value)} />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      <form onSubmit={handleRemoveValidator}>
-        <label>
-          Remove validator:
+          Add or remove validator:
           <input type="text" value={validatorInput} onChange={(e) => setValidatorInput(e.target.value)} />
         </label>
         <button type="submit">Submit</button>
@@ -321,6 +324,7 @@ function PoSIValidator() {
 }
 
 export default PoSIValidator;
+
 ```
 
 This code adds a form that takes a validator address as input and calls the `removeValidator` function when the form is submitted.
