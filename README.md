@@ -25,7 +25,7 @@
 
 ## Introduction 
 
-Blockchain technology relies heavily on consensus mechanisms. They make it possible for the network to agree on the ledger's current state and guarantee that every node has a consistent copy of the blockchain. The PoS (Proof-of-Stake) consensus technique is used by the Celo blockchain to reach consensus. We will delve further into the PoS consensus mechanism in this video and discover how it functions in relation to the Celo blockchain.
+Blockchain technology relies heavily on consensus mechanisms. They make it possible for the network to agree on the ledger's current state and guarantee that every node has a consistent copy of the blockchain. The [PoS (Proof-of-Stake)](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/) consensus technique is used by the Celo blockchain to reach consensus. We will delve further into the PoS consensus mechanism in this tutorial and discover how it functions in relation to the Celo blockchain.
 
 ## Prerequisites
 
@@ -33,14 +33,14 @@ To make the most of this course, you should have a few prerequisites before we b
 
 - You should have a basic understanding of blockchain technology and how it works.
 - You should have some knowledge of programming and the Solidity programming language
-- You should have `Node.js` & `NPM` installed on your computer.
-- You sould have a basic overview of react and its components as we would be building a dummy dapp.
+- You should have [Node.js](https://nodejs.org/en) & npm installed on your computer.
+- You should have a basic overview of [React](https://react.dev/) and its components as we would be building a dummy dapp.
 
 That's it, let's dive in.
 
 ## What Is Proof-Of-Stake (PoS) Consensus?
 
-Some blockchain networks employ the Proof-of-Stake (PoS) consensus technique to reach consensus among network nodes. PoS is based on the idea of staking, as opposed to Proof-of-labor (PoW), which calls for miners to carry out computational labor to verify transactions and add new blocks to the blockchain.
+Some blockchain networks employ the Proof-of-Stake (PoS) consensus technique to reach consensus among network nodes. PoS is based on the idea of staking, as opposed to [Proof-of-Work (PoW)](https://ethereum.org/en/developers/docs/consensus-mechanisms/pow/), which calls for miners to carry out computational labor to verify transactions and add new blocks to the blockchain.
 
 To take part in the consensus process, a certain quantity of cryptocurrency must be locked up as collateral, a practice known as staking. In a PoS system, validators are chosen based on their stake to add new blocks to the blockchain. Validators are chosen at random, with greater odds of selection for those with greater stakes.
 
@@ -63,7 +63,7 @@ Once a validator has been chosen to validate transactions and add new blocks to 
 
 You must first set up a node and lock up a specified quantity of CELO tokens as collateral in order to become a validator on the Celo network. How to begin going is as follows:
 
-- **Create a Celo node:** To create a Celo node, you must install the required software and set your node up so that it can join to the Celo network. The Celo manual has comprehensive instructions on how to set up a Celo node.
+- **Create a Celo node:** To create a Celo node, you must install the required software and set your node up so that it can join the Celo network. The Celo manual has comprehensive instructions on how to set up a Celo node.
 
 - **Acquire CELO tokens:** To become a validator on the Celo network, you'll need to lock up a certain amount of CELO tokens as collateral. You can acquire CELO tokens on a cryptocurrency exchange or through a peer-to-peer transaction.
 
@@ -85,15 +85,39 @@ pragma solidity ^0.8.0;
 contract PoSIValidator {
 
     address[] public validators;
+    mapping(address => bool) private isValidator;
+    address public admin;
 
+    constructor(){
+        admin = msg.sender;
+    }
+
+    /**
+        * @notice Allows the admin to add a validator
+        * @param validator The address to add as a validator
+    */
     function addValidator(address validator) public {
+        require(validator != address(0), "The zero address is not a valid address to be a validator");
+        require(!isValidator[validator], "Already a validator.");
+        require(admin == msg.sender, "Not admin");
+        isValidator[validator] = true;
         validators.push(validator);
     }
 
+    
+    /**
+        * @notice Allows the admin to remove a validator
+        * @param validator The address of the validator
+    */
     function removeValidator(address validator) public {
+        require(validator != address(0), "The zero address is not a valid address to be a validator");
+        require(isValidator[validator], "Already a validator.");
+        require(admin == msg.sender, "Not admin");
         for (uint i = 0; i < validators.length; i++) {
             if (validators[i] == validator) {
-                delete validators[i];
+                validators[i] = validators[validators.length - 1];
+                validators.pop();
+                isValidator[validator] = false;
                 break;
             }
         }
