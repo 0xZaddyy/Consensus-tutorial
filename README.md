@@ -78,29 +78,57 @@ To create a validator group on the Celo network, you'll need to write a Smart Co
 ```solidity
 // SPDX-License-Identifier: MIT
 
+// Specify the Solidity version for the contract
 pragma solidity ^0.8.0;
 
+/**
+ * @title PoSIValidator
+ * @dev A contract for managing a list of validators.
+ */
 contract PoSIValidator {
 
+    // Declare a public array to store validator addresses
     address[] public validators;
 
+    /**
+     * @dev Adds a new validator to the list.
+     * @param validator The address of the validator to add.
+     */
     function addValidator(address validator) public {
+        // Loop through the validators array and check if the validator already exists
+        for (uint i = 0; i < validators.length; i++) {
+            require(validators[i] != validator, "Validator already exists.");
+        }
+        // Add the new validator to the end of the array
         validators.push(validator);
     }
 
+    /**
+     * @dev Removes a validator from the list.
+     * @param validator The address of the validator to remove.
+     */
     function removeValidator(address validator) public {
+        // Loop through the validators array and find the index of the validator to remove
         for (uint i = 0; i < validators.length; i++) {
             if (validators[i] == validator) {
-                delete validators[i];
+                // Swap the validator to be removed with the last element in the array
+                validators[i] = validators[validators.length - 1];
+                // Remove the last element from the array
+                validators.pop();
                 break;
             }
         }
     }
 
+    /**
+     * @dev Returns the list of validators.
+     * @return The list of validators.
+     */
     function getValidators() public view returns (address[] memory) {
         return validators;
     }
 }
+
 ```
 
 This Smart Contract defines a PoSI validator group that allows validators to be added and removed from the group. The `addValidator` function adds a validator to the group while the `removeValidator` function removes a validator from the group. The `getValidators` function returns a list of all the validators in the group.
