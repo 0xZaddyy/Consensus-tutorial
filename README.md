@@ -169,23 +169,39 @@ const contractAddress = '<your-contract-address-here>';
 const PoSIValidatorContract = new contractkit.web3.eth.Contract(PoSIValidator.abi, contractAddress);
 
 export const getValidators = async () => {
-  const validators = await PoSIValidatorContract.methods.getValidators().call();
-  return validators;
+  try {
+    const validators = await PoSIValidatorContract.methods.getValidators().call();
+    return validators;
+  } catch (error) {
+    console.error(`Error fetching validators: ${error}`);
+    throw error;
+  }
 };
 
 export const addValidator = async (validator) => {
-  const accounts = await contractkit.web3.eth.getAccounts();
-  const txObject = PoSIValidatorContract.methods.addValidator(validator);
-  const tx = await contractkit.sendTransactionObject(txObject, { from: accounts[0] });
-  return tx;
+  try {
+    const accounts = await contractkit.web3.eth.getAccounts();
+    const txObject = PoSIValidatorContract.methods.addValidator(validator);
+    const tx = await contractkit.sendTransactionObject(txObject, { from: accounts[0] });
+    return tx;
+  } catch (error) {
+    console.error(`Error adding validator: ${error}`);
+    throw error;
+  }
 };
 
 export const removeValidator = async (validator) => {
-  const accounts = await contractkit.web3.eth.getAccounts();
-  const txObject = PoSIValidatorContract.methods.removeValidator(validator);
-  const tx = await contractkit.sendTransactionObject(txObject, { from: accounts[0] });
-  return tx;
+  try {
+    const accounts = await contractkit.web3.eth.getAccounts();
+    const txObject = PoSIValidatorContract.methods.removeValidator(validator);
+    const tx = await contractkit.sendTransactionObject(txObject, { from: accounts[0] });
+    return tx;
+  } catch (error) {
+    console.error(`Error removing validator: ${error}`);
+    throw error;
+  }
 };
+
 ```
 This code exports three functions that allow us to interact with the PoSI validator smart contract. The `getValidators` function retrieves the list of validators in the group, while the `addValidator` and `removeValidator` functions add and remove validators from the group, respectively.
 
@@ -202,24 +218,33 @@ import PoSIValidator from './PoSIValidator';
 In the `PoSIValidator` component, we can use the `getValidators` function to retrieve the list of validators and display it to the user. Update the `PoSIValidator` component as follows:
 
 ```javascript
+// Importing the necessary dependencies
 import { useState, useEffect } from 'react';
 import { getValidators } from './PoSIValidator';
 
+// Defining the PoSIValidator component
 function PoSIValidator() {
+  // Initializing the validators state with an empty array using useState hook
   const [validators, setValidators] = useState([]);
 
+  // Fetching validators data from the API endpoint using useEffect hook
   useEffect(() => {
     async function fetchValidators() {
+      // Retrieving validators data from the API endpoint
       const validators = await getValidators();
+      // Updating the validators state with the retrieved data
       setValidators(validators);
     }
+    // Invoking the fetchValidators function only once when the component mounts
     fetchValidators();
   }, []);
 
+  // Rendering the validators data in the UI
   return (
     <div>
       <h2>Validators</h2>
       <ul>
+        {/* Mapping through the validators array and rendering each validator as a list item */}
         {validators.map((validator) => (
           <li key={validator}>{validator}</li>
         ))}
@@ -228,7 +253,9 @@ function PoSIValidator() {
   );
 }
 
+// Exporting the PoSIValidator component
 export default PoSIValidator;
+
 ```
 
 This code uses the `useState` and `useEffect` hooks to fetch the list of validators when the component mounts and stores it in state using the setValidators function. The `useEffect` hook is used to make sure that the fetchValidators function is only called once when the component mounts, rather than on every re-render.
@@ -238,33 +265,47 @@ This code uses the `useState` and `useEffect` hooks to fetch the list of validat
 To allow users to add a validator to the group, we can add a form that takes a validator address as input. Update the `PoSIValidator` component as follows:
 
 ```javascript
+// Importing the necessary dependencies and functions from the PoSIValidator module
 import { useState, useEffect } from 'react';
 import { getValidators, addValidator } from './PoSIValidator';
 
+// Defining the PoSIValidator component
 function PoSIValidator() {
+  // Initializing the validators state with an empty array and the validatorInput state with an empty string using useState hook
   const [validators, setValidators] = useState([]);
   const [validatorInput, setValidatorInput] = useState('');
 
+  // Fetching validators data from the API endpoint using useEffect hook
   useEffect(() => {
     async function fetchValidators() {
+      // Retrieving validators data from the API endpoint
       const validators = await getValidators();
+      // Updating the validators state with the retrieved data
       setValidators(validators);
     }
+    // Invoking the fetchValidators function only once when the component mounts
     fetchValidators();
   }, []);
 
+  // Handling the submission of the Add Validator form
   const handleAddValidator = async (event) => {
     event.preventDefault();
+    // Adding a new validator to the API endpoint
     await addValidator(validatorInput);
+    // Clearing the input field
     setValidatorInput('');
+    // Retrieving validators data from the API endpoint again to update the state with the newly added validator
     const validators = await getValidators();
+    // Updating the validators state with the new validators data
     setValidators(validators);
   };
 
+  // Rendering the validators data and the Add Validator form in the UI
   return (
     <div>
       <h2>Validators</h2>
       <ul>
+        {/* Mapping through the validators array and rendering each validator as a list item */}
         {validators.map((validator) => (
           <li key={validator}>{validator}</li>
         ))}
@@ -272,13 +313,18 @@ function PoSIValidator() {
       <form onSubmit={handleAddValidator}>
         <label>
           Add validator:
+          {/* Creating an input field to add a new validator */}
           <input type="text" value={validatorInput} onChange={(e) => setValidatorInput(e.target.value)} />
         </label>
+        {/* Creating a submit button for the Add Validator form */}
         <button type="submit">Submit</button>
       </form>
     </div>
   );
 }
+
+// Exporting the PoSIValidator component
+export default PoSIValidator;
 
 export default PoSIValidator;
 ```
@@ -295,34 +341,48 @@ import { getValidators, addValidator, removeValidator } from './PoSIValidator';
 function PoSIValidator() {
   const [validators, setValidators] = useState([]);
   const [validatorInput, setValidatorInput] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchValidators() {
-      const validators = await getValidators();
-      setValidators(validators);
+      try {
+        const validators = await getValidators();
+        setValidators(validators);
+      } catch (error) {
+        setError('Failed to fetch validators');
+      }
     }
     fetchValidators();
   }, []);
 
   const handleAddValidator = async (event) => {
     event.preventDefault();
-    await addValidator(validatorInput);
-    setValidatorInput('');
-    const validators = await getValidators();
-    setValidators(validators);
+    try {
+      await addValidator(validatorInput);
+      setValidatorInput('');
+      const validators = await getValidators();
+      setValidators(validators);
+    } catch (error) {
+      setError('Failed to add validator');
+    }
   };
 
   const handleRemoveValidator = async (event) => {
     event.preventDefault();
-    await removeValidator(validatorInput);
-    setValidatorInput('');
-    const validators = await getValidators();
-    setValidators(validators);
+    try {
+      await removeValidator(validatorInput);
+      setValidatorInput('');
+      const validators = await getValidators();
+      setValidators(validators);
+    } catch (error) {
+      setError('Failed to remove validator');
+    }
   };
 
   return (
     <div>
       <h2>Validators</h2>
+      {error && <p>{error}</p>}
       <ul>
         {validators.map((validator) => (
           <li key={validator}>{validator}</li>
@@ -345,6 +405,7 @@ function PoSIValidator() {
     </div>
   );
 }
+
 
 export default PoSIValidator;
 ```
