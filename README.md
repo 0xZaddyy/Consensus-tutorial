@@ -1,46 +1,46 @@
 
-# A Developers Guide For Building And Implementing Consensus Algorithms On The Celo Blockchain.
+# A Developers Guide for Building and Implementing Consensus Algorithms on the Celo Blockchain
 
-## Table Of Contents
+## Table of Contents
 
-- [A Developers Guide For Building And Implementing Consensus Algorithms On The Celo Blockchain](#a-developers-guide-for-building-and-implementing-consensus-algorithms-on-the-celo-blockchain)
-    - [Table Of Contents](#table-of-contents)
-    - [Introduction](#introdution)
-    - [Perequisites](#perequisites)
-    - [What is Proof-of-Stake (PoS) Consensus?](#what-is-proof-of-stake-pos-consensus)
-    - [How Does PoS Consensus Work on the Celo Blockchain?](#how-does-pos-consensus-work-on-the-celo-blockchain)
-    - [Creating a PoSI Validator on the Celo Blockchain](#creating-a-posi-validator-on-the-celo-blockchain)
-    - [Writing a PoSI Validator Smart Contract](#writing-a-posi-validator-smart-contract)
-    - [Building the dapp to interact with the contract:](#building-the-dapp-to-interact-with-the-contract)
-        - [Step 1: New React app creation](#step-1-new-react-app-creation)
-        - [Step 2: Install the Celo SDK](#step-2-install-the-celo-sdk)
-        - [Step 3: Import the PoSI validator contract:](#step-3-import-the-posi-validator-contract)
-        - [Step 4: Import the PoSI validator contract in the app](#step-4-import-the-posi-validator-contract-in-the-app)
-        - [Step 5: Display the list of validators](#step-5-display-the-list-of-validators)
-        - [Step 6: Add a form to add a validator](#step-6-add-a-form-to-add-a-validator)
-        - [Step 7: Add a form to remove a validator](#step-7-add-a-form-to-remove-a-validator)
-        - [Step 8: Final touches](#step-8-final-touches)
-    - [Conclusion](#conclusion)        
+- [A Developers Guide for Building and Implementing Consensus Algorithms on the Celo Blockchain](#a-developers-guide-for-building-and-implementing-consensus-algorithms-on-the-celo-blockchain)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Prerequisites](#prerequisites)
+  - [What Is Proof-Of-Stake (PoS) Consensus?](#what-is-proof-of-stake-pos-consensus)
+  - [How Does PoS Consensus Work on the Celo Blockchain?](#how-does-pos-consensus-work-on-the-celo-blockchain)
+  - [Creating a PoSI Validator on the Celo Blockchain](#creating-a-posi-validator-on-the-celo-blockchain)
+  - [Writing a PoSI Validator Smart Contract](#writing-a-posi-validator-smart-contract)
+  - [Building the Dapp to Interact With the Contract:](#building-the-dapp-to-interact-with-the-contract)
+    - [Step 1: New React App Creation](#step-1-new-react-app-creation)
+    - [Step 2: Install the Celo SDK](#step-2-install-the-celo-sdk)
+    - [Step 3: Import the PoSI Validator Contract](#step-3-import-the-posi-validator-contract)
+    - [Step 4: Import the PoSI Validator Contract in the App](#step-4-import-the-posi-validator-contract-in-the-app)
+    - [Step 5: Display the List of Validators](#step-5-display-the-list-of-validators)
+    - [Step 6: Add a Form to Add a Validator](#step-6-add-a-form-to-add-a-validator)
+    - [Step 7: Add a Form to Remove a Validator](#step-7-add-a-form-to-remove-a-validator)
+    - [Step 8: Final Touches](#step-8-final-touches)
+  - [Conclusion](#conclusion)
 
 
-## Introdution 
+## Introduction 
 
-Blockchain technology relies heavily on consensus mechanisms. They make it possible for the network to agree on the ledger's current state and guarantee that every node has a consistent copy of the blockchain. The PoS (Proof-of-Stake) consensus technique is used by the Celo blockchain to reach consensus. We will delve further into the PoS consensus mechanism in this video and discover how it functions in relation to the Celo blockchain.
+Blockchain technology relies heavily on consensus mechanisms. They make it possible for the network to agree on the ledger's current state and guarantee that every node has a consistent copy of the blockchain. The [PoS (Proof-of-Stake)](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/) consensus technique is used by the Celo blockchain to reach consensus. We will delve further into the PoS consensus mechanism in this tutorial and discover how it functions in relation to the Celo blockchain.
 
-## Perequisites
+## Prerequisites
 
 To make the most of this course, you should have a few prerequisites before we begin.
 
 - You should have a basic understanding of blockchain technology and how it works.
 - You should have some knowledge of programming and the Solidity programming language
-- You should have `Node.js` & `NPM` installed on your computer.
-- You sould have a basic overview of react and its components as we would be building a dummy dapp.
+- You should have [Node.js](https://nodejs.org/en) & npm installed on your computer.
+- You should have a basic overview of [React](https://react.dev/) and its components as we would be building a dummy dapp.
 
 That's it, let's dive in.
 
-## What is Proof-of-Stake (PoS) Consensus?
+## What Is Proof-Of-Stake (PoS) Consensus?
 
-Some blockchain networks employ the Proof-of-Stake (PoS) consensus technique to reach consensus among network nodes. PoS is based on the idea of staking, as opposed to Proof-of-labor (PoW), which calls for miners to carry out computational labor to verify transactions and add new blocks to the blockchain.
+Some blockchain networks employ the Proof-of-Stake (PoS) consensus technique to reach consensus among network nodes. PoS is based on the idea of staking, as opposed to [Proof-of-Work (PoW)](https://ethereum.org/en/developers/docs/consensus-mechanisms/pow/), which calls for miners to carry out computational labor to verify transactions and add new blocks to the blockchain.
 
 To take part in the consensus process, a certain quantity of cryptocurrency must be locked up as collateral, a practice known as staking. In a PoS system, validators are chosen based on their stake to add new blocks to the blockchain. Validators are chosen at random, with greater odds of selection for those with greater stakes.
 
@@ -63,7 +63,7 @@ Once a validator has been chosen to validate transactions and add new blocks to 
 
 You must first set up a node and lock up a specified quantity of CELO tokens as collateral in order to become a validator on the Celo network. How to begin going is as follows:
 
-- **Create a Celo node:** To create a Celo node, you must install the required software and set your node up so that it can join to the Celo network. The Celo manual has comprehensive instructions on how to set up a Celo node.
+- **Create a Celo node:** To create a Celo node, you must install the required software and set your node up so that it can join the Celo network. The Celo manual has comprehensive instructions on how to set up a Celo node.
 
 - **Acquire CELO tokens:** To become a validator on the Celo network, you'll need to lock up a certain amount of CELO tokens as collateral. You can acquire CELO tokens on a cryptocurrency exchange or through a peer-to-peer transaction.
 
@@ -85,15 +85,39 @@ pragma solidity ^0.8.0;
 contract PoSIValidator {
 
     address[] public validators;
+    mapping(address => bool) private isValidator;
+    address public admin;
 
+    constructor(){
+        admin = msg.sender;
+    }
+
+    /**
+        * @notice Allows the admin to add a validator
+        * @param validator The address to add as a validator
+    */
     function addValidator(address validator) public {
+        require(validator != address(0), "The zero address is not a valid address to be a validator");
+        require(!isValidator[validator], "Already a validator.");
+        require(admin == msg.sender, "Not admin");
+        isValidator[validator] = true;
         validators.push(validator);
     }
 
+    
+    /**
+        * @notice Allows the admin to remove a validator
+        * @param validator The address of the validator
+    */
     function removeValidator(address validator) public {
+        require(validator != address(0), "The zero address is not a valid address to be a validator");
+        require(isValidator[validator], "Already a validator.");
+        require(admin == msg.sender, "Not admin");
         for (uint i = 0; i < validators.length; i++) {
             if (validators[i] == validator) {
-                delete validators[i];
+                validators[i] = validators[validators.length - 1];
+                validators.pop();
+                isValidator[validator] = false;
                 break;
             }
         }
@@ -107,11 +131,11 @@ contract PoSIValidator {
 
 This smart contract defines a PoSI validator group that allows validators to be added and removed from the group. The `addValidator` function adds a validator to the group, while the `removeValidator` function removes a validator from the group. The `getValidators` function returns a list of all the validators in the group.
 
-## Building the dapp to interact with the contract:
+## Building the Dapp to Interact With the Contract:
 
 Here is an illustration of how to create a fake app that communicates with the smart contract for the PoSI validator that we created in the earlier section. Consider creating a mobile application that enables users to examine a list of the PoSI validators in a group and add or remove validators from the group. Here is how to go about it:
 
-### Step 1: New React app creation
+### Step 1: New React App Creation
 Run the following command in your terminal to start a new React app:
 
 ```bash
@@ -130,7 +154,7 @@ npm install @celo/contractkit
 
 This will install the Celo SDK in your app.
 
-### Step 3: Import the PoSI validator contract
+### Step 3: Import the PoSI Validator Contract
 
 We must import the PoSI validator smart contract into our app in order to interact with it. In the src directory, make a new file called PoSIValidator.js and add the following code:
 
@@ -161,9 +185,9 @@ export const removeValidator = async (validator) => {
   return tx;
 };
 ```
-This code exports three functions that allow us to interact with the PoSI validator smart contract. The `getValidators` function retrieves the list of validators in the group, while the `addValidator` and `removeValidator` functions add and remove validators from the group, respectively.
+This code exports three functions that allow us to interact with the PoSI validator smart contract. The `getValidators()` function retrieves the list of validators in the group, while the `addValidator()` and `removeValidator()` functions add and remove validators from the group, respectively.
 
-### Step 4: Import the PoSI validator contract in the app
+### Step 4: Import the PoSI Validator Contract in the App
 
 Open the `App.js` file in the `src` directory and import the `PoSIValidator` component:
 
@@ -171,8 +195,8 @@ Open the `App.js` file in the `src` directory and import the `PoSIValidator` com
 import PoSIValidator from './PoSIValidator';
 ```
 
-### Step 5: Display the list of validators
-In the `PoSIValidator` component, we can use the `getValidators` function to retrieve the list of validators and display it to the user. Update the `PoSIValidator` component as follows:
+### Step 5: Display the List of Validators
+In the `PoSIValidator` component, we can use the `getValidators()` function to retrieve the list of validators and display it to the user. Update the `PoSIValidator` component as follows:
 
 ```javascript
 import { useState, useEffect } from 'react';
@@ -204,9 +228,9 @@ function PoSIValidator() {
 export default PoSIValidator;
 ```
 
-This code uses the `useState` and `useEffect` hooks to fetch the list of validators when the component mounts and stores it in state using the setValidators function. The useEffect hook is used to make sure that the fetchValidators function is only called once when the component mounts, rather than on every re-render.
+This code uses the `useState` and `useEffect` hooks to fetch the list of validators when the component mounts and stores it in state using the `setValidators()` function. The useEffect hook is used to make sure that the fetchValidators function is only called once when the component mounts, rather than on every re-render.
 
-### Step 6: Add a form to add a validator
+### Step 6: Add a Form to Add a Validator
 
 To allow users to add a validator to the group, we can add a form that takes a validator address as input. Update the `PoSIValidator` component as follows:
 
@@ -258,7 +282,7 @@ export default PoSIValidator;
 
 This code adds a form that takes a validator address as input and calls the `addValidator` function when the form is submitted.
 
-### Step 7: Add a form to remove a validator
+### Step 7: Add a Form to Remove a Validator
 
  To allow users to remove a validator from the group, we can add a form that takes a validator address as input. Update the PoSIValidator component as follows:
 
@@ -325,7 +349,7 @@ export default PoSIValidator;
 
 This code adds a form that takes a validator address as input and calls the `removeValidator` function when the form is submitted.
 
-### Step 8: Final touches
+### Step 8: Final Touches
 
  Now that our mock app is operational, we can make a few design and usability improvements. To style the PoSIValidator component, we can utilize CSS. Here is an illustration of how to style the component:
 
@@ -445,8 +469,8 @@ button[type="submit"]:hover {
 
 This CSS code gives the PoSIValidator component some fundamental styling to improve its appearance and user-friendliness.
 
-That's all, then! Using Solidity and React, we created a straightforward dummy app for a PoSI contract on the Celo blockchain. Of course, this is just a starting point, and there are lots of ways we can enhance and expand on this program. Nevertheless, perhaps this lesson has provided you with a solid foundation for creating your own.
+That's all, then! Using Solidity and React, we created a straightforward dummy app for a PoSI contract on the Celo blockchain. Of course, this is just a starting point, and there are lots of ways we can enhance and expand this program. Nevertheless, perhaps this lesson has provided you with a solid foundation for creating your own.
 
 ## Conclusion
 
-The PoS consensus algorithm and its operation in relation to the **Celo** blockchain have been discussed in this lesson. We've learnt how epoch rotation is utilized to keep the network safe and decentralized, how validators are chosen based on their stake and identity, and how validators are selected. Additionally, we went over how to set up a Solidity smart contract to create a PoSI validator group and join the **Celo** network as a validator, we also built a very simple mock dapp to interact with the contract on a user friendly ground. Developers may create scalable and more effective blockchain apps on the **Celo** network by knowing the PoS consensus method.
+The PoS consensus algorithm and its operation in relation to the **Celo** blockchain have been discussed in this lesson. We've learned how epoch rotation is utilized to keep the network safe and decentralized, how validators are chosen based on their stake and identity, and how validators are selected. Additionally, we went over how to set up a Solidity smart contract to create a PoSI validator group and join the **Celo** network as a validator, we also built a very simple mock dapp to interact with the contract on a user-friendly ground. Developers may create scalable and more effective blockchain apps on the **Celo** network by knowing the PoS consensus method.
