@@ -35,7 +35,8 @@ To make the most of this course, you need to have the following pre-requisites b
 - Knowledge of Solidity programming language.
 - Install [Node.js](https://nodejs.org/en/download) & [NPM](https://www.npmjs.com/package/download) 
 - Basic overview of [React](https://react-cn.github.io/react/downloads.html) and its components.
-That's it, let's dive in.
+
+Let's dive in!!
 
 ## What is Proof-of-Stake (PoS) Consensus?-
 
@@ -428,26 +429,38 @@ function PoSIValidator() {
 
   useEffect(() => {
     async function fetchValidators() {
-      const validators = await getValidators();
-      setValidators(validators);
+      try {
+        const validators = await getValidators();
+        setValidators(validators);
+      } catch (error) {
+        console.error(error);
+      }
     }
     fetchValidators();
   }, []);
 
   const handleAddValidator = async (event) => {
     event.preventDefault();
-    await addValidator(validatorInput);
-    setValidatorInput('');
-    const validators = await getValidators();
-    setValidators(validators);
+    try {
+      await addValidator(validatorInput);
+      setValidatorInput('');
+      const validators = await getValidators();
+      setValidators(validators);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleRemoveValidator = async (event) => {
     event.preventDefault();
-    await removeValidator(validatorInput);
-    setValidatorInput('');
-    const validators = await getValidators();
-    setValidators(validators);
+    try {
+      await removeValidator(validatorInput);
+      setValidatorInput('');
+      const validators = await getValidators();
+      setValidators(validators);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -482,7 +495,8 @@ export default PoSIValidator;
 And here's the CSS code for the `PoSIValidator` component:
 
 ```css
-.PoSIValidator {
+/* Use a more descriptive class name */
+.form-container {
   font-family: Arial, sans-serif;
   margin: 20px;
 }
@@ -493,30 +507,33 @@ h2 {
   margin-bottom: 10px;
 }
 
-ul {
+/* Use Flexbox for layout */
+.form-list {
+  display: flex;
+  flex-direction: column;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-li {
+.form-list__item {
   font-size: 18px;
   margin-bottom: 10px;
 }
 
-label {
+.form-label {
   display: block;
   margin-bottom: 10px;
 }
 
-input[type="text"] {
+.form-input {
   font-size: 16px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-button[type="submit"] {
+.form-submit {
   font-size: 16px;
   padding: 5px 10px;
   background-color: #008080;
@@ -526,12 +543,12 @@ button[type="submit"] {
   cursor: pointer;
 }
 
-button[type="submit"]:hover {
+.form-submit:hover {
   background-color: #006666;
 }
 ```
 
-This CSS code gives the PoSIValidator component some fundamental styling to improve its appearance and user-friendliness.
+This CSS code gives the `PoSIValidator` component some fundamental styling to improve its appearance and user-friendliness.
 
 That's all!! Using Solidity and React, we created a dummy app for a PoSI contract on the Celo blockchain. Of course, this is just a starting point and there are lots of ways we can enhance and expand on this program. Nevertheless, perhaps this lesson has provided you with a solid foundation for creating your own.
 
